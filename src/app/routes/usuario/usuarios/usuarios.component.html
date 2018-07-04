@@ -1,23 +1,23 @@
 <div class="content-heading">
-    <div>Tables
-        <small>A showcase of different components inside tables</small></div>
+    <div>Usuarios
+        <small>Lista de Usuarios</small></div>
 </div>
-<!-- START card-->
 <div class="card card-default">
-    <div class="card-header">Demo Table #1</div>
+    <div class="card-header">Lista de Usuarios</div>
     <!-- START table-responsive-->
     <div class="table-responsive">
         <table class="table table-bordered table-hover" id="table-ext-1">
             <thead>
                 <tr>
                     <th>UID</th>
-                    <th>Picture</th>
+                    <th>Perfil</th>
                     <th>Username</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
                     <th>Email</th>
-                    <th>Profile</th>
-                    <th>Last Login</th>
+                    <th>Profile %</th>
+                    <th>Activo</th>
+                    <th>Ultimo Acceso</th>
                     <th checkAll>
                         <div class="checkbox c-checkbox">
                             <label>
@@ -25,6 +25,13 @@
                               <span class="fa fa-check"></span>
                           </label>
                         </div>
+                    </th>
+                    <th>
+                        <button [routerLink]="['/config/usuario', 'nuevo']" type="button" class="fa fa-pencil-square-o btn btn-outline-success btn-sm"></button>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#usuarioModal">
+                            Launch demo modal
+                        </button>
                     </th>
                 </tr>
             </thead>
@@ -36,12 +43,18 @@
                             <img class="img-fluid circle" src="assets/img/user/01.jpg" alt="Image" />
                         </div>
                     </td>
-                    <td>@twitter</td>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>mail@example.com</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.email }}</td>
                     <td class="text-center">
                         <div class="radial-bar radial-bar-25 radial-bar-xs" data-label="25%"></div>
+                    </td>
+                    <td>
+                        <label class="switch">
+                        <input type="checkbox" />
+                        <span></span>
+                        </label>
                     </td>
                     <td>1 week</td>
                     <td>
@@ -52,55 +65,17 @@
                           </label>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>2</td>
                     <td>
-                        <div class="media">
-                            <img class="img-fluid circle" src="assets/img/user/02.jpg" alt="Image" />
-                        </div>
-                    </td>
-                    <td>@mdo</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mail@example.com</td>
-                    <td class="text-center">
-                        <div class="radial-bar radial-bar-50 radial-bar-xs" data-label="50%"></div>
-                    </td>
-                    <td>25 minutes</td>
-                    <td>
-                        <div class="checkbox c-checkbox">
-                            <label>
-                              <input type="checkbox" />
-                              <span class="fa fa-check"></span>
-                          </label>
-                        </div>
+                        <button [routerLink]="['/config/usuario', usuario._id]" type="button" class="fa fa-pencil-square-o btn btn-outline-success btn-sm"> </button>
+                        <a (click)="editUser(usuario)" class="btn btn-sm btn-primary">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a (click)="deleteUser(usuario)" class="btn btn-sm btn-danger">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </td>
                 </tr>
-                <tr>
-                    <td>3</td>
-                    <td>
-                        <div class="media">
-                            <img class="img-fluid circle" src="assets/img/user/03.jpg" alt="Image" />
-                        </div>
-                    </td>
-                    <td>@fat</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>mail@example.com</td>
-                    <td class="text-center">
-                        <div class="radial-bar radial-bar-80 radial-bar-xs" data-label="80%"></div>
-                    </td>
-                    <td>10 hours</td>
-                    <td>
-                        <div class="checkbox c-checkbox">
-                            <label>
-                              <input type="checkbox" />
-                              <span class="fa fa-check"></span>
-                          </label>
-                        </div>
-                    </td>
-                </tr>
+
             </tbody>
         </table>
     </div>
@@ -132,7 +107,7 @@
     </div>
 </div>
 <!-- START card-->
-<div class="card card-default">
+<div class="card card-default" style="display: none">
     <div class="card-header">Demo Table #2</div>
     <!-- START table-responsive-->
     <div class="table-responsive">
@@ -276,7 +251,7 @@
 </div>
 <!-- END card-->
 <!-- START row-->
-<div class="row">
+<div class="row" style="display: none">
     <div class="col-xl-6">
         <!-- START card-->
         <div class="card card-default">
@@ -384,3 +359,25 @@
     </div>
 </div>
 <!-- END row-->
+
+<!--modal-->
+<div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Usuario Alta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!----->

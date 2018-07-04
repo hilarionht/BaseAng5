@@ -37,6 +37,7 @@ import { JqcloudDirective } from './directives/jqcloud/jqcloud.directive';
 @NgModule({
     imports: [
         CommonModule,
+        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         TranslateModule,

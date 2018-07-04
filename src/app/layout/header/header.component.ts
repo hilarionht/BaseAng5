@@ -1,3 +1,4 @@
+import { UsuarioService } from './../../services/usuario/usuario.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 const screenfull = require('screenfull');
 const browser = require('jquery.browser');
@@ -20,7 +21,12 @@ export class HeaderComponent implements OnInit {
     isNavSearchVisible: boolean;
     @ViewChild('fsbutton') fsbutton;  // the fullscreen button
 
-    constructor(public menu: MenuService, public userblockService: UserblockService, public settings: SettingsService) {
+    constructor(
+            public menu: MenuService, 
+            public userblockService: UserblockService, 
+            public settings: SettingsService,
+            public userService: UsuarioService
+        ) {
 
         // show only a few items on demo
         this.menuItems = menu.getMenu().slice(0,4); // for horizontal layout
@@ -34,6 +40,9 @@ export class HeaderComponent implements OnInit {
         }
     }
 
+    logOut(){
+        this.userService.logout();
+    }
     toggleUserBlock(event) {
         event.preventDefault();
         this.userblockService.toggleVisibility();

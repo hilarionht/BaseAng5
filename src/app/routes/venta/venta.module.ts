@@ -8,12 +8,13 @@ import { AgGridModule } from 'ag-grid-angular';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { VentaComponent } from './venta/venta.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { LoginGuard } from '../../services/service.index';
 
 
 const routes: Routes = [
     { path: '', redirectTo: 'ventas' },
     { path: 'venta/:id', component: VentaComponent },
-    { path: 'lista', component: VentasComponent }
+    { path: 'lista', component: VentasComponent , canActivate: [LoginGuard]}
     
 ];
 

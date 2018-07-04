@@ -3,7 +3,7 @@ import { VerificaTokenGuard } from './../guards/verifica-token.guard';
 import { SubirArchivoService } from './../subir-archivo/subir-archivo.service';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../../models/usuario.model';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { URL_SERVICIOS } from '../../config/config';
 
 import { Observable } from 'rxjs/Observable';
@@ -68,7 +68,7 @@ export class UsuarioService {
   }
   crearUsuario( usuario: Usuario ) {
     let url = URL_SERVICIOS + '/usuario';
-    return this.http.post(url, usuario)
+    return this.http.post(url, usuario ,  { headers:new HttpHeaders().append('Authorization', `Bearer ${  localStorage.getItem('token') }`)})
       .map((res: any) => {
         this.toastr.success( usuario.nombre, 'Usuario Creado!',{ timeOut: 3000,positionClass: 'toast-top-right'});
         return res.usuario;
@@ -112,7 +112,7 @@ export class UsuarioService {
               .map( (resp: any) => {
                 let tokenInfo = this.getDecodedAccessToken(resp.token); // decode token
                 let expireDate = tokenInfo.exp; // get token expiration dateTime
-                //console.log(tokenInfo); // show decoded token object in console
+                console.log(tokenInfo); // show decoded token object in console
                 this.guardarStorage(tokenInfo.id, resp.token, tokenInfo.usuario);
                 return true;
               }).catch( err => {
@@ -124,16 +124,17 @@ export class UsuarioService {
   
   actualizarUsuario( usuario: Usuario ) {
 
-    let url = URL_SERVICIOS + '/usuario/' + usuario._id;
-    url += '?token=' + this.token;
+    let url = URL_SERVICIOS + '/usuario';
 
-    return this.http.put( url, usuario )
+    return this.http.put( url, usuario ,  { headers:new HttpHeaders().append('Authorization', `Bearer ${  localStorage.getItem('token') }`) } )
                 .map( (resp: any) => {
 
                   if ( usuario._id === this.usuario._id ) {
                     let usuarioDB: Usuario = resp.usuario;
                     this.guardarStorage( usuarioDB._id, this.token, usuarioDB );
                   }
+                  console.log('update....', resp);
+                  
                   this.toastr.success( this.usuario.nombre, 'Usuario Actualizado!',{ timeOut: 3000,positionClass: 'toast-top-right'});
                   return true;
                 });
@@ -144,7 +145,7 @@ export class UsuarioService {
     this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )
           .then( (resp: any) => {
 
-            this.usuario.img = resp.usuario.img;
+            this.usuario.fotoPerfil = resp.usuario.fotoPerfil;
             this.toastr.success( this.usuario.nombre, 'Imagen Actualizada!',{ timeOut: 3000,positionClass: 'toast-top-right'});//swal( 'Imagen Actualizada', this.usuario.nombre, 'success' );
             this.guardarStorage( id, this.token, this.usuario );
 
@@ -157,7 +158,7 @@ export class UsuarioService {
 
   cargarUsuarios( desde: number = 0 ) {
     let url = URL_SERVICIOS + '/usuario';//?desde=' + desde;
-    return this.http.get( url );
+    return this.http.get( url, { headers:new HttpHeaders().append('Authorization', `Bearer ${  localStorage.getItem('token') }`)} );
   }
 
   buscarUsuarios( termino: string ) {
@@ -166,6 +167,12 @@ export class UsuarioService {
     return this.http.get( url )
                 .map( (resp: any) => resp.usuarios );
 
+  }
+  
+  obtenerUsuario(id: string){
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    return this.http.get( url, { headers:new HttpHeaders().append('Authorization', `Bearer ${  localStorage.getItem('token') }`)} )
+                    .map(resp => resp);
   }
 
   borrarUsuario( id: string ) {
